@@ -21,7 +21,6 @@
         Next
 
         a = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}
-        loadBoard()
     End Sub
 
     Sub loadLabels()
@@ -39,6 +38,7 @@
     Sub updateGame()
         Dim aliveCells As Integer
         Dim changeList(xDirection, yDirection) As Integer
+        Dim x2, y2 As Integer
 
         For x = 0 To xDirection
             For y = 0 To yDirection
@@ -46,14 +46,36 @@
             Next
         Next
 
-        For x = 0 To xDirection - 1
-            For y = 0 To yDirection - 1
+        For x = 0 To xDirection
+            For y = 0 To yDirection
                 aliveCells = 0
+                x2 = 0
+                y2 = 0
                 For i = 0 To 7
-                    If 21 > x + a(i, 0) And x + a(i, 0) >= 0 And 13 > y + a(i, 1) And y + a(i, 1) >= 0 Then
-                        If list(x + a(i, 0), y + a(i, 1)).Tag = 1 Then
+                    x2 = x + a(i, 0)
+                    y2 = y + a(i, 1)
+
+                    If xDirection < x2 Then
+                        x2 = 0
+                    End If
+
+                    If x2 < 0 Then
+                        x2 = xDirection
+                    End If
+
+                    If yDirection < y2 Then
+                        y2 = 0
+                    End If
+
+                    If y2 < 0 Then
+                        y2 = yDirection
+                    End If
+
+                    If xDirection >= x2 And x2 >= 0 And yDirection >= y2 And y2 >= 0 Then
+                        If list(x2, y2).Tag = 1 Then
                             aliveCells += 1
                         End If
+
                     End If
                 Next
 
@@ -99,7 +121,7 @@
 
     Sub loadBoard()
         Dim numAlive As Integer
-        numAlive = randomGen(0, 200)
+        numAlive = randomGen(0, 300)
         For i = 0 To numAlive
             list(randomGen(0, xDirection), randomGen(0, yDirection)).Tag = 1
         Next

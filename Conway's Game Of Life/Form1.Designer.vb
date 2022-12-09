@@ -39,7 +39,7 @@ Partial Class Form1
         '
         'Timer1
         '
-        Me.Timer1.Interval = 500
+        Me.Timer1.Interval = 350
         '
         'btnRandomGen
         '
