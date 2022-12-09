@@ -1,6 +1,6 @@
 ﻿Public Class Form1
-    Dim xDirection As Integer = 30
-    Dim yDirection As Integer = 19
+    Dim xDirection As Integer = 52
+    Dim yDirection As Integer = 28
 
     Dim list(xDirection, yDirection) As Label
     Dim a(7, 2) As Integer
@@ -8,8 +8,8 @@
         For x = 0 To xDirection
             For y = 0 To yDirection
                 Dim newLabel As New Label With {
-                   .Location = New Point(100 + (50 * x), (50 * y)),
-                   .Size = New Size(50, 50),
+                   .Location = New Point(100 + (25 * x), (25 * y)),
+                   .Size = New Size(25, 25),
                    .BackColor = Color.White,
                    .BorderStyle = BorderStyle.FixedSingle,
                    .Tag = 0
@@ -21,6 +21,7 @@
         Next
 
         a = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}
+        lblSpeed.Text = 500
     End Sub
 
     Sub loadLabels()
@@ -121,7 +122,7 @@
 
     Sub loadBoard()
         Dim numAlive As Integer
-        numAlive = randomGen(0, 300)
+        numAlive = randomGen(0, 400)
         For i = 0 To numAlive
             list(randomGen(0, xDirection), randomGen(0, yDirection)).Tag = 1
         Next
@@ -131,5 +132,10 @@
 
     Private Sub btnRandomGen_Click(sender As Object, e As EventArgs) Handles btnRandomGen.Click
         loadBoard()
+    End Sub
+
+    Private Sub VScrollBar1_Scroll(sender As Object, e As ScrollEventArgs) Handles VScrollBar1.Scroll
+        Timer1.Interval = VScrollBar1.Value + 1
+        lblSpeed.Text = VScrollBar1.Value
     End Sub
 End Class
