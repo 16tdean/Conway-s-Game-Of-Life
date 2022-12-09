@@ -1,28 +1,32 @@
 ﻿Public Class Form1
-    Dim list(10, 10) As Label
+    Dim xDirection As Integer = 30
+    Dim yDirection As Integer = 19
+
+    Dim list(xDirection, yDirection) As Label
     Dim a(7, 2) As Integer
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        For x = 0 To 10
-            For y = 0 To 10 'creates 42 labels
+        For x = 0 To xDirection
+            For y = 0 To yDirection
                 Dim newLabel As New Label With {
-                   .Location = New Point(100 + (75 * x), (75 * y)),
-                   .Size = New Size(75, 75),
+                   .Location = New Point(100 + (50 * x), (50 * y)),
+                   .Size = New Size(50, 50),
                    .BackColor = Color.White,
                    .BorderStyle = BorderStyle.FixedSingle,
                    .Tag = 0
                 }
                 list(x, y) = newLabel 'adds all lables to list
-                AddHandler list(x, y).Click, AddressOf Me.Click
+                AddHandler list(x, y).Click, AddressOf Me.toggleLife
                 Me.Controls.Add(list(x, y))
             Next
         Next
 
         a = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}
+        loadBoard()
     End Sub
 
     Sub loadLabels()
-        For x = 0 To 10
-            For y = 0 To 10
+        For x = 0 To xDirection
+            For y = 0 To yDirection
                 If list(x, y).Tag = 1 Then
                     list(x, y).BackColor = Color.Black
                 Else
@@ -34,11 +38,19 @@
 
     Sub updateGame()
         Dim aliveCells As Integer
-        For x = 0 To 10
-            For y = 0 To 10
+        Dim changeList(xDirection, yDirection) As Integer
+
+        For x = 0 To xDirection
+            For y = 0 To yDirection
+                changeList(x, y) = list(x, y).Tag
+            Next
+        Next
+
+        For x = 0 To xDirection - 1
+            For y = 0 To yDirection - 1
                 aliveCells = 0
                 For i = 0 To 7
-                    If 11 > x + a(i, 0) And x + a(i, 0) >= 0 And 11 > y + a(i, 1) And y + a(i, 1) >= 0 Then
+                    If 21 > x + a(i, 0) And x + a(i, 0) >= 0 And 13 > y + a(i, 1) And y + a(i, 1) >= 0 Then
                         If list(x + a(i, 0), y + a(i, 1)).Tag = 1 Then
                             aliveCells += 1
                         End If
@@ -46,16 +58,22 @@
                 Next
 
                 If list(x, y).Tag = 0 And aliveCells = 3 Then
-                    list(x, y).Tag = 1
-                ElseIf list(x, y).Tag = 1 And (aliveCells <> 2 Or aliveCells <> 3) Then
-                    list(x, y).Tag = 0
+                    changeList(x, y) = 1
+                ElseIf list(x, y).Tag = 1 And (aliveCells <> 2 And aliveCells <> 3) Then
+                    changeList(x, y) = 0
                 End If
 
             Next
         Next
+
+        For x = 0 To xDirection
+            For y = 0 To yDirection
+                list(x, y).Tag = changeList(x, y)
+            Next
+        Next
     End Sub
 
-    Sub click(sender As Object, e As EventArgs)
+    Sub toggleLife(sender As Object, e As EventArgs)
         If sender.tag = 1 Then
             sender.tag = 0
         Else
@@ -66,7 +84,30 @@
     End Sub
 
     Private Sub btnStart_Click(sender As Object, e As EventArgs) Handles btnStart.Click
+        Timer1.Enabled = Not Timer1.Enabled
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         updateGame()
         loadLabels()
+    End Sub
+
+    Function randomGen(min, max)
+        Static generator As System.Random = New System.Random()
+        Return generator.Next(min, max)
+    End Function
+
+    Sub loadBoard()
+        Dim numAlive As Integer
+        numAlive = randomGen(0, 200)
+        For i = 0 To numAlive
+            list(randomGen(0, xDirection), randomGen(0, yDirection)).Tag = 1
+        Next
+
+        loadLabels()
+    End Sub
+
+    Private Sub btnRandomGen_Click(sender As Object, e As EventArgs) Handles btnRandomGen.Click
+        loadBoard()
     End Sub
 End Class

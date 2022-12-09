@@ -22,7 +22,10 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.btnStart = New System.Windows.Forms.Button()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.btnRandomGen = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'btnStart
@@ -31,20 +34,38 @@ Partial Class Form1
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(75, 23)
         Me.btnStart.TabIndex = 0
-        Me.btnStart.Text = "Start"
+        Me.btnStart.Text = "Toggle Time"
         Me.btnStart.UseVisualStyleBackColor = True
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 500
+        '
+        'btnRandomGen
+        '
+        Me.btnRandomGen.Location = New System.Drawing.Point(12, 41)
+        Me.btnRandomGen.Name = "btnRandomGen"
+        Me.btnRandomGen.Size = New System.Drawing.Size(75, 45)
+        Me.btnRandomGen.TabIndex = 1
+        Me.btnRandomGen.Text = "Randomly fill grid"
+        Me.btnRandomGen.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.btnRandomGen)
         Me.Controls.Add(Me.btnStart)
         Me.Name = "Form1"
+        Me.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Text = "Form1"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents btnStart As Button
+    Friend WithEvents Timer1 As Timer
+    Friend WithEvents btnRandomGen As Button
 End Class
