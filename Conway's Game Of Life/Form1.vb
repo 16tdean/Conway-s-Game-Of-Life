@@ -12,7 +12,7 @@
                    .Size = New Size(25, 25),
                    .BackColor = Color.White,
                    .BorderStyle = BorderStyle.FixedSingle,
-                   .Tag = 0
+                   .Tag = False
                 }
                 list(x, y) = newLabel 'adds all lables to list
                 AddHandler list(x, y).Click, AddressOf Me.toggleLife
@@ -27,7 +27,7 @@
     Sub loadLabels()
         For x = 0 To xDirection
             For y = 0 To yDirection
-                If list(x, y).Tag = 1 Then
+                If list(x, y).Tag = True Then
                     list(x, y).BackColor = Color.Black
                 Else
                     list(x, y).BackColor = Color.White
@@ -38,7 +38,7 @@
 
     Sub updateGame()
         Dim aliveCells As Integer
-        Dim changeList(xDirection, yDirection) As Integer
+        Dim changeList(xDirection, yDirection) As Boolean
         Dim x2, y2 As Integer
 
         For x = 0 To xDirection
@@ -73,17 +73,17 @@
                     End If
 
                     If xDirection >= x2 And x2 >= 0 And yDirection >= y2 And y2 >= 0 Then
-                        If list(x2, y2).Tag = 1 Then
+                        If list(x2, y2).Tag Then
                             aliveCells += 1
                         End If
 
                     End If
                 Next
 
-                If list(x, y).Tag = 0 And aliveCells = 3 Then
-                    changeList(x, y) = 1
-                ElseIf list(x, y).Tag = 1 And (aliveCells <> 2 And aliveCells <> 3) Then
-                    changeList(x, y) = 0
+                If list(x, y).Tag = False And aliveCells = 3 Then
+                    changeList(x, y) = True
+                ElseIf list(x, y).Tag = True And (aliveCells <> 2 And aliveCells <> 3) Then
+                    changeList(x, y) = False
                 End If
 
             Next
@@ -97,12 +97,7 @@
     End Sub
 
     Sub toggleLife(sender As Object, e As EventArgs)
-        If sender.tag = 1 Then
-            sender.tag = 0
-        Else
-            sender.tag = 1
-        End If
-
+        sender.tag = Not sender.tag
         loadLabels()
     End Sub
 
@@ -122,9 +117,9 @@
 
     Sub loadBoard()
         Dim numAlive As Integer
-        numAlive = randomGen(0, 400)
+        numAlive = randomGen(50, 400)
         For i = 0 To numAlive
-            list(randomGen(0, xDirection), randomGen(0, yDirection)).Tag = 1
+            list(randomGen(0, xDirection + 1), randomGen(0, yDirection + 1)).Tag = True
         Next
 
         loadLabels()
